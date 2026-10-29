@@ -65,8 +65,10 @@ else
     echo "前端产物已是 ${HERMES_TAG}（stamp 命中），跳过预构建"
 fi
 
-if [ "$VER" != "$HERMES_VER" ]; then
-    echo "FATAL: manifest 版本(${VER}) 与 HERMES_VERSION(${HERMES_VER}) 不一致——fnos 包版本严格绑定 hermes-agent 版本号，请先同步 manifest 与 config/bootstrap/hermes-version.env"
+# 版本严格绑定校验：manifest 必须等于 HERMES_VERSION（该 hermes 版本的首个构建），
+# 或 HERMES_VERSION.N（仅包内变更的重建——fnOS 拒绝安装版本号相同的 fpk，故递增构建号）
+if [ "$VER" != "$HERMES_VER" ] && ! echo "$VER" | grep -Eq "^${HERMES_VER}\.[0-9]+$"; then
+    echo "FATAL: manifest 版本(${VER}) 与 HERMES_VERSION(${HERMES_VER}) 绑定失败——仅允许 ${HERMES_VER} 或 ${HERMES_VER}.N（包内重建构建号）"
     exit 1
 fi
 
