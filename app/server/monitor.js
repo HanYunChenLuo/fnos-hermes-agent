@@ -4752,7 +4752,7 @@ async function handleFetch(req) {
   }
 
   // ── 应用包更新（GitHub Releases / Actions）────────────────────────────────
-  const GITHUB_REPO = process.env.GITHUB_REPO || "veenyi/fnos-hermes-agent";
+  const GITHUB_REPO = process.env.GITHUB_REPO || "HanYunChenLuo/fnos-hermes-agent";
   const GITHUB_PAT_FILE = `${VAR_DIR}/github_pat`;
 
   function getGitHubPAT() {
