@@ -1,25 +1,19 @@
 # fnos-hermes-agent 更新记录
 
 > 单一持续更新记录。最新版本在最上方，安装包见同目录 `fnos-hermes-agent_vX.Y.Z.fpk`。
-
----
-
-## v0.22.6（2026-10-29）
-
-**应用内更新源切换到本 fork（HanYunChenLuo/fnos-hermes-agent），后续更新全部从本仓库分发**：
-
-- v0.22.5 已真机安装验证（NAS 实测：hermes 0.22.5 editable 安装与网关/前端拉起正常）
-- 仓库引用切换（更新检查 / 更新下载直链 / 应用内触发 CI 构建）：`monitor.js`（GITHUB_REPO 默认值，更新检查 + Actions dispatch + 运行状态）、`custom_routes.js`（扩展页更新卡片同源逻辑）、`ui/index.html`（GitHub 下载页按钮、仓库链接、直链兜底共 3 处）。均保留 `GITHUB_REPO` 环境变量覆盖能力
-- 版本规则补充：hermes 核心升级时 manifest 直接取核心版本号（如 0.22.5）；仅包内变更（不含 hermes 升级）时在当前版本基础上递增末位（本版 0.22.5 → 0.22.6，hermes 核心保持 0.22.5），build-fpk.sh 的版本不一致提示文案同步更新
-- 注意：更新源切换需安装本版后生效（v0.22.5 及更早版本的更新检查仍指向上游发行方仓库）。本版起「更新」页直读本 fork 的 GitHub Releases——在本仓库 dispatch CI 构建并发布 Release，应用内即可检测到新版本；配置 GitHub PAT 后还支持应用内一键触发构建
+> 版本规则：fnos 包版本**严格绑定 hermes-agent 版本号**（manifest `version` ≡ `HERMES_VERSION`，build-fpk.sh 强制校验）；仅包内变更时以同版本号重建并替换 Release 产物。
 
 ---
 
 ## v0.22.5（2026-10-29）
 
-**Hermes 核心升级 0.20.0 → 0.22.5（tag v0.22.5，2026-10-22）+ 新增 macOS 打包路径**：
+**Hermes 核心升级 0.20.0 → 0.22.5（tag v0.22.5，2026-10-22）+ CI 打包链路 + 更新源切换到本 fork**：
+
+> 本版经历两次构建：初版（已真机安装验证，NAS 实测 hermes 0.22.5 editable 安装与网关/前端拉起正常）→ 重建版（加入更新源切换，同版本号替换 Release 产物，需手动再安装一次）。
 
 - **fnos 包版本对齐 hermes 核心版本**：自本版起 fnos 包版本（manifest `version`）直接取 hermes 核心版本号（0.21.149 → 0.22.5），二者保持一致，避免"包版本 0.21.x / 核心版本 0.2x.y"双轨造成的混淆。此前为两条独立版本线（monitor.js 对两个版本分开展示的逻辑不受影响）
+
+- **更新源切换到本 fork（HanYunChenLuo/fnos-hermes-agent，重建版加入）**：仓库引用（更新检查 / 更新下载直链 / 应用内触发 CI 构建）从上游发行方 veenyi/fnos-hermes-agent 全部切换——`monitor.js`（GITHUB_REPO 默认值）、`custom_routes.js`（扩展页更新卡片同源逻辑）、`ui/index.html`（GitHub 下载页按钮/仓库链接/直链兜底共 3 处），均保留 `GITHUB_REPO` 环境变量覆盖能力。本版起「更新」页直读本 fork 的 GitHub Releases，在本仓库 dispatch CI 构建并发布即会被检测到；配置 GitHub PAT 后支持应用内一键触发构建。注意：更新源切换需安装重建版后生效
 
 - **上游跨度**：v2026.8.3 → v0.22.5，跨约 13 个 release（日期式 tag v2026.8.19~9.24 → semver v0.21.6/0.21.7 → v0.22.0~0.22.5）
 - **关键适配 ① pyproject 版本注入**：上游 v0.22.x 起 `pyproject.toml` 的 `version` 字段改为发布期注入的静态占位 `"0.0.0"`（无 setuptools-scm，构建后端纯 setuptools）。照搬源码做 editable 安装会得到 0.0.0，`install_callback` 的版本比较/升级去重逻辑（`uv pip show` 比对 `HERMES_VERSION`）失效。打包时把 slim 副本内 version 改写为 0.22.5

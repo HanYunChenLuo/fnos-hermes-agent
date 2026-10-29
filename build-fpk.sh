@@ -66,7 +66,8 @@ else
 fi
 
 if [ "$VER" != "$HERMES_VER" ]; then
-    echo "WARN: manifest 版本(${VER}) 与 HERMES_VERSION(${HERMES_VER}) 不一致——版本规则：hermes 核心升级时 manifest 直接取核心版本号，仅包内变更（不含 hermes 升级）时在当前版本基础上递增末位（此时 manifest > HERMES_VERSION 为正常）"
+    echo "FATAL: manifest 版本(${VER}) 与 HERMES_VERSION(${HERMES_VER}) 不一致——fnos 包版本严格绑定 hermes-agent 版本号，请先同步 manifest 与 config/bootstrap/hermes-version.env"
+    exit 1
 fi
 
 echo ""
