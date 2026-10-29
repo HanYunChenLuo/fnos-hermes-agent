@@ -4,6 +4,17 @@
 
 ---
 
+## v0.22.6（2026-10-29）
+
+**应用内更新源切换到本 fork（HanYunChenLuo/fnos-hermes-agent），后续更新全部从本仓库分发**：
+
+- v0.22.5 已真机安装验证（NAS 实测：hermes 0.22.5 editable 安装与网关/前端拉起正常）
+- 仓库引用切换（更新检查 / 更新下载直链 / 应用内触发 CI 构建）：`monitor.js`（GITHUB_REPO 默认值，更新检查 + Actions dispatch + 运行状态）、`custom_routes.js`（扩展页更新卡片同源逻辑）、`ui/index.html`（GitHub 下载页按钮、仓库链接、直链兜底共 3 处）。均保留 `GITHUB_REPO` 环境变量覆盖能力
+- 版本规则补充：hermes 核心升级时 manifest 直接取核心版本号（如 0.22.5）；仅包内变更（不含 hermes 升级）时在当前版本基础上递增末位（本版 0.22.5 → 0.22.6，hermes 核心保持 0.22.5），build-fpk.sh 的版本不一致提示文案同步更新
+- 注意：更新源切换需安装本版后生效（v0.22.5 及更早版本的更新检查仍指向上游发行方仓库）。本版起「更新」页直读本 fork 的 GitHub Releases——在本仓库 dispatch CI 构建并发布 Release，应用内即可检测到新版本；配置 GitHub PAT 后还支持应用内一键触发构建
+
+---
+
 ## v0.22.5（2026-10-29）
 
 **Hermes 核心升级 0.20.0 → 0.22.5（tag v0.22.5，2026-10-22）+ 新增 macOS 打包路径**：
